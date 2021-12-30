@@ -1,0 +1,27 @@
+#plot 1
+
+elec <- read.csv("household_power_consumption.txt", header = T,
+                 sep =";")
+elec_data <- subset(elec, Date == "1/2/2007" | Date == "2/2/2007")
+library(dplyr)
+library(ggplot2)
+library(data.table)
+elec_data$Global_active_power <- as.numeric(elec_data$Global_active_power)
+elec_data$Date <- as.Date(elec_data$Date, format = "%d/%m/%Y")
+datetime <- paste(as.Date(elec_data$Date), elec_data$Time)
+elec_data$Datetime <- as.POSIXct(datetime)
+
+
+
+png(filename = "plot1.png",
+    width = 480, height = 480)
+
+
+
+ggplot(elec_data, mapping = aes(x = Global_active_power)) +
+        geom_histogram(colour = "red", binwidth = 0.5) +
+        xlab("Global Active Power") +
+        ylab("Frequency") +
+        ggtitle("Global Active Power", subtitle = "Histogram")
+
+dev.off()
